@@ -3,12 +3,17 @@
  * Run with: node create-admin.js
  */
 
+require('dotenv').config();
 const admin = require('firebase-admin');
-const serviceAccount = require('./moducate-demo-firebase-adminsdk-fbsvc-00898e11a2.json'); // Service account key file
 
-// Initialize Firebase Admin SDK
+// Initialize Firebase Admin SDK using environment variables
 admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount)
+  credential: admin.credential.cert({
+    projectId: process.env.FIREBASE_PROJECT_ID,
+    clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+    // The private key needs to be properly formatted with newlines
+    privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n')
+  })
 });
 
 const db = admin.firestore();
